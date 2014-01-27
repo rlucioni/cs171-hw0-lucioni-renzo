@@ -1,4 +1,5 @@
-cs171-hw0-lucioni-renzo
-=======================
+**Name:** Renzo Lucioni
 
-CS 171: HW 0
+**HUID:** 90760092
+
+**Email:** rlucioni@college.harvard.edu
