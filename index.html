@@ -32,20 +32,19 @@
 
             var svgWidth = 500;
             var svgHeight = 100;
-            var barPadding = 1;
 
             var svg = d3.select("body")
                         .append("svg")
                         .attr("width", svgWidth)
                         .attr("height", svgHeight);
 
-            // var dataset = [ 5, 10, 15, 20, 25 ];
+            var dataset = [ 5, 10, 15, 20, 25 ];
 
-            var dataset = [];
-            for (var i = 0; i < 20; i++) {
-                var newNumber = Math.round(Math.random() * 30);
-                dataset.push(newNumber);
-            }
+            // var dataset = [];
+            // for (var i = 0; i < 20; i++) {
+            //     var newNumber = Math.round(Math.random() * 30);
+            //     dataset.push(newNumber);
+            // }
 
             // loading data from external sources
 
@@ -90,68 +89,23 @@
             //         return barHeight + "px";
             //     });
 
-            // var circles = svg.selectAll("circle")
-            //                 .data(dataset)
-            //                 .enter()
-            //                 .append("circle");
+            var circles = svg.selectAll("circle")
+                            .data(dataset)
+                            .enter()
+                            .append("circle");
 
-            // circles.attr("cx", function(d, i) {
-            //         return (i * 50) + 25;
-            //     })
-            //     .attr("cy", svgHeight/2)
-            //     .attr("r", function(d) {
-            //         return d;
-            //     })
-            //     .attr("fill", "yellow")
-            //     .attr("stroke", "orange")
-            //     .attr("stroke-width", function(d) {
-            //         return d/2;
-            //     })
-
-            svg.selectAll("rect")
-                .data(dataset)
-                .enter()
-                .append("rect")
-                .attr({
-                    x: function(d, i) { return i * (svgWidth / dataset.length); },
-                    y: function(d) { return svgHeight - (d * 4); },
-                    width: svgWidth / dataset.length - barPadding,
-                    height: function(d) { return d * 4; },
-                    fill: function(d) { return "rgb(127, 201, " + (d * 10) + ")"; }
-                });
-                // .attr("x", function(d, i) {
-                //     return i * (svgWidth / dataset.length);
-                // })
-                // .attr("y", function(d) {
-                //     return svgHeight - d * 4;
-                // })
-                // .attr("width", svgWidth / dataset.length - barPadding)
-                // .attr("height", function(d) {
-                //     return d * 4;
-                // })
-                // .attr("fill", function(d) {
-                //     return "rgb(0, 0, " + (d * 10) + ")";
-                // });
-
-            svg.selectAll("text")
-                .data(dataset)
-                .enter()
-                .append("text")
-                .text(function(d) {
+            circles.attr("cx", function(d, i) {
+                    return (i * 50) + 25;
+                })
+                .attr("cy", svgHeight/2)
+                .attr("r", function(d) {
                     return d;
                 })
-                .attr({
-                    x: function(d, i) { 
-                        return i * (svgWidth / dataset.length) + (svgWidth / dataset.length - barPadding) / 2; 
-                    },
-                    y: function(d) { 
-                        return svgHeight - (d * 4) + 14;
-                    },
-                    "font-family": "sans-serif",
-                    "font-size": "11px",
-                    fill: "white",
-                    "text-anchor": "middle"
-                });
+                .attr("fill", "yellow")
+                .attr("stroke", "orange")
+                .attr("stroke-width", function(d) {
+                    return d/2;
+                })
 
 
         </script>
