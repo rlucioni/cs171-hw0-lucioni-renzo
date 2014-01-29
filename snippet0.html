@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Minimal D3 Example</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+ 
+    <style>
+      .bar {
+        fill: steelblue;
+      }
+       
+      .bar:hover {
+        fill: orange;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <script type="text/javascript">
+ 
+      var data = [150, 230, 180, 90];
+       
+      // append a new SVG element (i.e., canvas) to the DOM within the body element
+      var svg = d3.select("body")
+        .append("svg")
+        .attr("width", 300)
+        .attr("height", 200);
+       
+      // this snippet, an example of D3's method chaining syntax, makes a horizontal bar graph with one bar mapped to each datum in the data array
+      // start by selecting all elements in the DOM matching the CSS class selector ".bar" (we're selecting all elements in the DOM with class "bar")
+      svg.selectAll(".bar")
+        // count and parse data values; execute everything past this point once for each data value
+        .data(data)
+        // create new, data-bound elements with class bar
+        .enter()
+        // create a new SVG "rect" element and add it to the DOM, to the end but just inside of every soon-to-exist element with class bar
+        .append("rect")
+        // take reference to the newly created rect and uses a multivalue map to add the following attributes to it, including the class "bar"
+        .attr({
+          class : "bar",
+          // d takes values 150, 230, 180, and 90 while this program executes
+          width : function(d) {return d;},
+          height: "40",
+          // i takes values 0, 1, 2, and 3 while this program executes
+          y : function(d, i) {return i*50 + 10;},
+          x : "10"
+        });
+   
+    </script>   
+  </body>
+</html>

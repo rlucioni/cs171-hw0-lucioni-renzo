@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Minimal D3 Example</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+ 
+    <style>
+      .bar {
+        fill: steelblue;
+      }
+       
+      .bar:hover {
+        fill: orange;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <script type="text/javascript">
+ 
+      var data = [150, 230, 180, 90];
+       
+      // append a new SVG element (i.e., canvas) to the DOM within the body element
+      var svg = d3.select("body")
+        .append("svg")
+        .attr("width", 300)
+        .attr("height", 200);
+       
+      // this snippet behaves exactly the same as the snippet found in snippet0.html; the difference is that it uses variables to break up the extended chaining syntax found in snippet0.html
+      // bars contains a reference to all elements of class bar inside svg; since there are no such elements yet, this selection is empty
+      var bars = svg.selectAll(".bar");
+
+      // data() parses the values in our data array, and hands off these values to enter() for processing; enter() returns a placeholder selection for each data point that does not yet have a corresponding element with class bar; so, bars_enter contains data.length placeholders
+      var bars_enter = bars.data(data).enter();
+
+      // for each of the placeholders, we append an SVG "rect" to the DOM and assign it the appropriate attributes; rects contains references to these data.length rects
+      var rects = bars_enter.append("rect")
+        .attr({
+          class : "bar",
+          width : function(d) {return d;},
+          height: "40",
+          y : function(d, i) {return i*50 + 10;},
+          x : "10"
+         });
+   
+    </script>   
+  </body>
+</html>

@@ -2,13 +2,158 @@
 <html lang="en"> 
     <head>
         <meta charset="utf-8">
-        <title>D3 Page Template</title>
+        <title>D3 Intro</title>
         <!-- link directly to the latest, minified release -->
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <style type="text/css">
+
+            div.bar {
+                display: inline-block;
+                width: 20px;
+                height: 75px;
+                background-color: #7fc97f;
+                margin-right: 2px;
+            }
+
+        </style>
+
     </head>
     <body>
         <script type="text/javascript">
-            // Your beautiful D3 code will go here
+
+            // d3.select("body")
+            //     .append("p")
+            //     .text("New paragraph!");
+            
+            // functionally equivalent to the following:
+            // var body = d3.select("body")
+            // var p = body.append("p")
+            // p.text("New paragraph!")
+
+            var svgWidth = 500;
+            var svgHeight = 100;
+            var barPadding = 1;
+
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", svgWidth)
+                        .attr("height", svgHeight);
+
+            // var dataset = [ 5, 10, 15, 20, 25 ];
+
+            var dataset = [];
+            for (var i = 0; i < 20; i++) {
+                var newNumber = Math.round(Math.random() * 30);
+                dataset.push(newNumber);
+            }
+
+            // loading data from external sources
+
+            // declare global var to hold data
+            // var dataset;
+
+            // to load data from CSV:
+            // d3.csv("food.csv", function(data) {
+            //     dataset = data;
+            //     console.log(data);
+            // });
+
+            // to load data from JSON
+            // d3.json("foo.json", function(json) {
+            //     dataset = data;
+            //     console.log(json);
+            // });
+
+            // d3.select("body")
+            //     .selectAll("p")
+            //     .data(dataset)
+            //     .enter()
+            //     .append("p")
+            //     // .text("New paragraph!")
+            //     .text(function(d) { return "This datum is " + d + "."; })
+            //     .style("color", function(d) {
+            //         if (d > 15) {
+            //             return "red";
+            //         } else {
+            //             return "black";
+            //         }
+            //     });
+
+            // d3.select("body")
+            //     .selectAll("div")
+            //     .data(dataset)
+            //     .enter()
+            //     .append("div")
+            //     .attr("class", "bar")
+            //     .style("height", function(d) {
+            //         var barHeight = d*5;
+            //         return barHeight + "px";
+            //     });
+
+            // var circles = svg.selectAll("circle")
+            //                 .data(dataset)
+            //                 .enter()
+            //                 .append("circle");
+
+            // circles.attr("cx", function(d, i) {
+            //         return (i * 50) + 25;
+            //     })
+            //     .attr("cy", svgHeight/2)
+            //     .attr("r", function(d) {
+            //         return d;
+            //     })
+            //     .attr("fill", "yellow")
+            //     .attr("stroke", "orange")
+            //     .attr("stroke-width", function(d) {
+            //         return d/2;
+            //     })
+
+            svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr({
+                    x: function(d, i) { return i * (svgWidth / dataset.length); },
+                    y: function(d) { return svgHeight - (d * 4); },
+                    width: svgWidth / dataset.length - barPadding,
+                    height: function(d) { return d * 4; },
+                    fill: function(d) { return "rgb(127, 201, " + (d * 10) + ")"; }
+                });
+                // .attr("x", function(d, i) {
+                //     return i * (svgWidth / dataset.length);
+                // })
+                // .attr("y", function(d) {
+                //     return svgHeight - d * 4;
+                // })
+                // .attr("width", svgWidth / dataset.length - barPadding)
+                // .attr("height", function(d) {
+                //     return d * 4;
+                // })
+                // .attr("fill", function(d) {
+                //     return "rgb(0, 0, " + (d * 10) + ")";
+                // });
+
+            svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d) {
+                    return d;
+                })
+                .attr({
+                    x: function(d, i) { 
+                        return i * (svgWidth / dataset.length) + (svgWidth / dataset.length - barPadding) / 2; 
+                    },
+                    y: function(d) { 
+                        return svgHeight - (d * 4) + 14;
+                    },
+                    "font-family": "sans-serif",
+                    "font-size": "11px",
+                    fill: "white",
+                    "text-anchor": "middle"
+                });
+
+
         </script>
     </body>
 </html>
