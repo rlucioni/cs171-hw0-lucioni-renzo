@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en"> 
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Sexy Bars</title>
+        <!-- link directly to the latest, minified release -->
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <p>Mouseover here to update the chart with new values.</p>
+
+        <script type="text/javascript">
+
+            // var svgWidth = 500;
+            // var svgHeight = 100;
+            // var barPadding = 1;
+
+            // var svg = d3.select("body")
+            //             .append("svg")
+            //             .attr("width", svgWidth)
+            //             .attr("height", svgHeight);
+
+            // Mike Bostock's margin convention
+            var margin = {top: 10, right: 10, bottom: 10, left: 10}
+            var canvasWidth = 600 - margin.left - margin.right;
+            var canvasHeight = 250 - margin.top - margin.bottom;
+
+            var svg = d3.select("body")
+                .append("svg")
+                .attr("width", canvasWidth + margin.left + margin.right)
+                .attr("height", canvasHeight + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var dataset = [ 
+                5,
+                10,
+                13,
+                19,
+                21,
+                25,
+                22,
+                18,
+                15,
+                13,
+                11,
+                12,
+                15,
+                20,
+                18,
+                17,
+                16,
+                18,
+                23,
+                25 
+            ];
+
+            // var dataset = [];
+            // for (var i = 0; i < 20; i++) {
+            //     var newNumber = Math.round(Math.random() * 30);
+            //     dataset.push(newNumber);
+            // }
+
+            var xScale = d3.scale.ordinal()
+                .domain(d3.range(dataset.length))
+                .rangeRoundBands([0, canvasWidth], 0.05)
+
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(dataset)])
+                .range([0, canvasHeight])
+
+            svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr({
+                    x: function(d, i) { return xScale(i); },
+                    y: function(d) { return canvasHeight - yScale(d); },
+                    width: xScale.rangeBand(),
+                    height: function(d) { return yScale(d); },
+                    fill: function(d) { return "rgb(127, 201, " + (d * 10) + ")"; }
+                });
+                // .attr("x", function(d, i) {
+                //     return i * (svgWidth / dataset.length);
+                // })
+                // .attr("y", function(d) {
+                //     return svgHeight - d * 4;
+                // })
+                // .attr("width", svgWidth / dataset.length - barPadding)
+                // .attr("height", function(d) {
+                //     return d * 4;
+                // })
+                // .attr("fill", function(d) {
+                //     return "rgb(0, 0, " + (d * 10) + ")";
+                // });
+
+            svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d) {
+                    return d;
+                })
+                .attr({
+                    x: function(d, i) { 
+                        return xScale(i) + xScale.rangeBand() / 2; 
+                    },
+                    y: function(d) { 
+                        return canvasHeight - yScale(d) + 14;
+                    },
+                    "font-family": "sans-serif",
+                    "font-size": "11px",
+                    fill: "white",
+                    "text-anchor": "middle"
+                });
+
+            d3.select("p")
+                .on("mouseover", function() {
+                // .on("click", function() {
+                    var numValues = dataset.length;
+                    var maxValue = 50;
+                    dataset = [];
+                    for (var i = 0; i < numValues; i++) {
+                        var newNumber = Math.floor(Math.random() * maxValue);
+                        if (newNumber < 2) {
+                            newNumber = 2;
+                        }
+                        dataset.push(newNumber)
+                    }
+
+                    yScale.domain([0, d3.max(dataset)]);
+
+                    svg.selectAll("rect")
+                        .data(dataset)
+                        .transition()
+                        .delay(function(d, i) {
+                            return i/dataset.length * 1000;
+                        })
+                        .duration(500)
+                        // .ease("bounce")
+                        .attr({
+                            y: function(d) { return canvasHeight - yScale(d) },
+                            "height": function(d) { return yScale(d); },
+                            fill: function(d) { return "rgb(127, 201, " + (d * 10) + ")"; }
+                        });
+
+                    svg.selectAll("text")
+                        .data(dataset)
+                        .transition()
+                        .delay(function(d, i) {
+                            return i/dataset.length * 1000;
+                        })
+                        .duration(500)
+                        // .ease("bounce")
+                        .text(function(d) {
+                            return d;
+                        })
+                        .attr({
+                            x: function(d, i) { 
+                                return xScale(i) + xScale.rangeBand() / 2; 
+                            },
+                            y: function(d) { 
+                                return canvasHeight - yScale(d) + 14;
+                            },
+                        });
+                })
+
+        </script>
+    </body>
+</html>
