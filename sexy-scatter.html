@@ -22,6 +22,8 @@
         </style>
     </head>
     <body>
+        <p>Mouseover here to update the chart with new values.</p>
+
         <script type="text/javascript">
 
             // var svgWidth = 500;
@@ -44,6 +46,16 @@
                         .append("g")
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+            svg.append("clipPath")
+                .attr("id", "chart-area")
+                .append("rect")
+                .attr({
+                    x: 0,
+                    y: 0,
+                    width: canvasWidth,
+                    height: canvasHeight
+                });
+
             // var dataset = [
             //     [5,   20], 
             //     [480, 90], 
@@ -60,11 +72,10 @@
 
             var dataset = [];
             var numDataPoints = 50;
-            var xRange = Math.random() * 1000;
-            var yRange = Math.random() * 1000;
+            var maxRange = Math.random() * 1000
             for (var i = 0; i < numDataPoints; i++) {
-                var newNumber1 = Math.floor(Math.random() * xRange);
-                var newNumber2 = Math.floor(Math.random() * yRange);
+                var newNumber1 = Math.floor(Math.random() * maxRange);
+                var newNumber2 = Math.floor(Math.random() * maxRange);
                 dataset.push([newNumber1, newNumber2]);
             }
 
@@ -85,29 +96,35 @@
                 // .range([svgHeight - padding, padding]);
                 .range([canvasHeight, 0]);
 
-            var rScale = d3.scale.linear()
-                .domain([0, d3.max(dataset, function(d) { return d[1]; })])
-                .range([2, 5]);
+            // var rScale = d3.scale.linear()
+            //     .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+            //     .range([2, 5]);
 
             var xAxis = d3.svg.axis()
                 .scale(xScale)
                 .orient("bottom")
                 .ticks(5)
-                .tickFormat(d3.format(".1%"));
+                // .tickFormat(d3.format(".1%"));
 
             var yAxis = d3.svg.axis()
                 .scale(yScale)
                 .orient("left")
                 .ticks(5);
 
-            svg.selectAll("circle")
+            svg.append("g")
+                .attr({
+                    id: "circles",
+                    "clip-path": "url(#chart-area)"
+                })
+                .selectAll("circle")
                 .data(dataset)
                 .enter()
                 .append("circle")
                 .attr({
                     cx: function(d) { return xScale(d[0]); },
                     cy: function(d) { return yScale(d[1]); },
-                    r: function(d) { return rScale(d[1]); }
+                    // r: function(d) { return rScale(d[1]); }
+                    r: 2
                 });
 
             // svg.selectAll("text")
@@ -126,15 +143,74 @@
             //     });
 
             svg.append("g")
-                .attr("class", "axis")
+                .attr("class", "x axis")
                 // .attr("transform", "translate(0," + (svgHeight - padding) + ")")
                 .attr("transform", "translate(0," + canvasHeight + ")")
                 .call(xAxis);
 
             svg.append("g")
-                .attr("class", "axis")
+                .attr("class", "y axis")
                 // .attr("transform", "translate(" + padding + ",0)")
                 .call(yAxis);
+
+            d3.select("p")
+                .on("mouseover", function() {
+                    var numValues = dataset.length;
+                    var maxRange = Math.random() * 1000;
+                    dataset = [];
+                    for (var i = 0; i < numValues; i++) {
+                        var newNumber1 = Math.floor(Math.random() * maxRange);
+                        var newNumber2 = Math.floor(Math.random() * maxRange);
+                        dataset.push([newNumber1, newNumber2]);
+                    }
+
+                    xScale.domain([0, d3.max(dataset, function(d) { return d[0]; })]);
+                    yScale.domain([0, d3.max(dataset, function(d) { return d[1]; })]);
+
+                    svg.selectAll("circle")
+                        .data(dataset)
+                        .transition()
+                        // .delay(function(d, i) {
+                        //     return i/dataset.length * 1000;
+                        // })
+                        .duration(1000)
+                        .each("start", function() {
+                            d3.select(this)
+                                .attr({
+                                    fill: "orange",
+                                    r: 4
+                                });
+                        })
+                        .attr({
+                            cx: function(d) { return xScale(d[0]); },
+                            cy: function(d) { return yScale(d[1]); }
+                        })
+                        .transition()
+                        .duration(1000)
+                        .attr({
+                            fill: "black",
+                            r: 2
+                        });
+                        // .each("end", function() {
+                        //     d3.select(this)
+                        //         .transition()
+                        //         .duration(1000)
+                        //         .attr({
+                        //             fill: "black",
+                        //             r: 2
+                        //         });
+                        // });
+
+                    svg.select(".x.axis")
+                        .transition()
+                        .duration(1000)
+                        .call(xAxis);
+
+                    svg.select(".y.axis")
+                        .transition()
+                        .duration(1000)
+                        .call(yAxis);
+                });
 
         </script>
     </body>

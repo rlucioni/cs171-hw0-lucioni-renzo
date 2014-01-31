@@ -7,18 +7,11 @@
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     </head>
     <body>
-        <p>Mouseover here to update the chart with new values.</p>
+        <p id="randomize">Randomize values.</p>
+        <p id="add">Add a new bar.</p>
+        <p id="remove">Remove a bar.</p>
 
         <script type="text/javascript">
-
-            // var svgWidth = 500;
-            // var svgHeight = 100;
-            // var barPadding = 1;
-
-            // var svg = d3.select("body")
-            //             .append("svg")
-            //             .attr("width", svgWidth)
-            //             .attr("height", svgHeight);
 
             // Mike Bostock's margin convention
             var margin = {top: 10, right: 10, bottom: 10, left: 10}
@@ -33,80 +26,66 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             var dataset = [ 
-                5,
-                10,
-                13,
-                19,
-                21,
-                25,
-                22,
-                18,
-                15,
-                13,
-                11,
-                12,
-                15,
-                20,
-                18,
-                17,
-                16,
-                18,
-                23,
-                25 
+                { key: 0,  value: 5 }, 
+                { key: 1,  value: 10 }, 
+                { key: 2,  value: 13 }, 
+                { key: 3,  value: 19 }, 
+                { key: 4,  value: 21 }, 
+                { key: 5,  value: 25 }, 
+                { key: 6,  value: 22 }, 
+                { key: 7,  value: 18 }, 
+                { key: 8,  value: 15 }, 
+                { key: 9,  value: 13 },
+                { key: 10, value: 11 },
+                { key: 11, value: 12 },
+                { key: 12, value: 15 },
+                { key: 13, value: 20 },
+                { key: 14, value: 18 },
+                { key: 15, value: 17 },
+                { key: 16, value: 16 },
+                { key: 17, value: 18 },
+                { key: 18, value: 23 },
+                { key: 19, value: 25 } 
             ];
 
-            // var dataset = [];
-            // for (var i = 0; i < 20; i++) {
-            //     var newNumber = Math.round(Math.random() * 30);
-            //     dataset.push(newNumber);
-            // }
+            var key = function(d) {
+                return d.key;
+            }
 
             var xScale = d3.scale.ordinal()
                 .domain(d3.range(dataset.length))
-                .rangeRoundBands([0, canvasWidth], 0.05)
+                .rangeRoundBands([0, canvasWidth], 0.05);
 
             var yScale = d3.scale.linear()
-                .domain([0, d3.max(dataset)])
-                .range([0, canvasHeight])
+                .domain([0, d3.max(dataset, function(d) { return d.value; })])
+                .range([0, canvasHeight]);
 
             svg.selectAll("rect")
-                .data(dataset)
+                .data(dataset, key)
                 .enter()
                 .append("rect")
                 .attr({
                     x: function(d, i) { return xScale(i); },
-                    y: function(d) { return canvasHeight - yScale(d); },
+                    y: function(d) { return canvasHeight - yScale(d.value); },
                     width: xScale.rangeBand(),
-                    height: function(d) { return yScale(d); },
-                    fill: function(d) { return "rgb(127, 201, " + (d * 10) + ")"; }
+                    height: function(d) { return yScale(d.value); },
+                    fill: function(d) { return "rgb(127, 201, " + (d.value * 10) + ")"; }
                 });
-                // .attr("x", function(d, i) {
-                //     return i * (svgWidth / dataset.length);
-                // })
-                // .attr("y", function(d) {
-                //     return svgHeight - d * 4;
-                // })
-                // .attr("width", svgWidth / dataset.length - barPadding)
-                // .attr("height", function(d) {
-                //     return d * 4;
-                // })
-                // .attr("fill", function(d) {
-                //     return "rgb(0, 0, " + (d * 10) + ")";
-                // });
 
             svg.selectAll("text")
-                .data(dataset)
+                .data(dataset, key)
                 .enter()
                 .append("text")
                 .text(function(d) {
-                    return d;
+                    // return d;
+                    return d.value;
                 })
                 .attr({
                     x: function(d, i) { 
                         return xScale(i) + xScale.rangeBand() / 2; 
                     },
                     y: function(d) { 
-                        return canvasHeight - yScale(d) + 14;
+                        return canvasHeight - yScale(d.value) + 14;
                     },
                     "font-family": "sans-serif",
                     "font-size": "11px",
@@ -114,56 +93,101 @@
                     "text-anchor": "middle"
                 });
 
-            d3.select("p")
-                .on("mouseover", function() {
-                // .on("click", function() {
-                    var numValues = dataset.length;
-                    var maxValue = 50;
-                    dataset = [];
-                    for (var i = 0; i < numValues; i++) {
-                        var newNumber = Math.floor(Math.random() * maxValue);
-                        if (newNumber < 2) {
-                            newNumber = 2;
+            d3.selectAll("p")
+                .on("click", function() {
+                    var paragraphID = d3.select(this).attr("id");
+
+                    if (paragraphID == "randomize") {
+                        var numValues = dataset.length;
+                        var maxValue = 50;
+                        for (var i = 0; i < numValues; i++) {
+                            var newNumber = Math.floor(Math.random() * maxValue);
+                            if (newNumber < Math.round(maxValue/15)) {
+                                newNumber = Math.round(maxValue/15);
+                            }
+                            dataset[i].value = newNumber;
                         }
-                        dataset.push(newNumber)
+                    } else if (paragraphID == "add") {
+                        var maxValue = 25;
+                        var newNumber = Math.floor(Math.random() * maxValue);
+                        var highKey = dataset[dataset.length - 1].key;
+                        dataset.push({key: highKey + 1, value: newNumber});
+                    } else if (paragraphID == "remove") {
+                        dataset.shift();
                     }
 
-                    yScale.domain([0, d3.max(dataset)]);
+                    xScale.domain(d3.range(dataset.length));
+                    yScale.domain([0, d3.max(dataset, function(d) {
+                        return d.value;
+                    })]);
 
-                    svg.selectAll("rect")
-                        .data(dataset)
-                        .transition()
-                        .delay(function(d, i) {
-                            return i/dataset.length * 1000;
-                        })
-                        .duration(500)
-                        // .ease("bounce")
+                    var bars = svg.selectAll("rect")
+                        .data(dataset, key);
+
+                    var labels = svg.selectAll("text")
+                        .data(dataset, key);
+
+                    bars.enter()
+                        .append("rect")
                         .attr({
-                            y: function(d) { return canvasHeight - yScale(d) },
-                            "height": function(d) { return yScale(d); },
-                            fill: function(d) { return "rgb(127, 201, " + (d * 10) + ")"; }
+                            x: canvasWidth + xScale.rangeBand() / 2,
+                            y: function(d) { return canvasHeight - yScale(d.value); },
+                            width: xScale.rangeBand(),
+                            height: function(d) { return yScale(d.value); },
+                            fill: function(d) { return "rgb(127, 201, " + (d.value * 10) + ")"; }
                         });
 
-                    svg.selectAll("text")
-                        .data(dataset)
-                        .transition()
-                        .delay(function(d, i) {
-                            return i/dataset.length * 1000;
-                        })
-                        .duration(500)
-                        // .ease("bounce")
+                    labels.enter()
+                        .append("text")
                         .text(function(d) {
-                            return d;
+                            return d.value;
                         })
+                        .attr({
+                            x: canvasWidth + xScale.rangeBand() / 2,
+                            y: function(d) { 
+                                return canvasHeight - yScale(d.value) + 14;
+                            },
+                            "font-family": "sans-serif",
+                            "font-size": "11px",
+                            fill: "white",
+                            "text-anchor": "middle"
+                        });
+
+                    bars.transition()
+                        .duration(500)
+                        .attr({
+                            x: function(d, i) {
+                                return xScale(i);
+                            },
+                            y: function(d) { return canvasHeight - yScale(d.value); },
+                            width: xScale.rangeBand(),
+                            height: function(d) { return yScale(d.value); }
+                        });
+
+                    labels.transition()
+                        .duration(500)
+                        .text(function(d) { return d.value;})
                         .attr({
                             x: function(d, i) { 
                                 return xScale(i) + xScale.rangeBand() / 2; 
                             },
                             y: function(d) { 
-                                return canvasHeight - yScale(d) + 14;
-                            },
+                                return canvasHeight - yScale(d.value) + 14;
+                            }
                         });
-                })
+
+                    bars.exit()
+                        .transition()
+                        .duration(500)
+                        .attr("x", -xScale.rangeBand() - xScale.rangeBand() / 2)
+                        .remove()
+
+                    labels.exit()
+                        .transition()
+                        .duration(500)
+                        .attr("x", -xScale.rangeBand() - xScale.rangeBand() / 2)
+                        .remove();
+                });
 
         </script>
     </body>
