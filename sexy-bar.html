@@ -11,184 +11,184 @@
         <p id="add">Add a new bar.</p>
         <p id="remove">Remove a bar.</p>
 
-        <script type="text/javascript">
+        <script src="js/bars.js"></script>
 
-            // Mike Bostock's margin convention
-            var margin = {top: 10, right: 10, bottom: 10, left: 10}
-            var canvasWidth = 600 - margin.left - margin.right;
-            var canvasHeight = 250 - margin.top - margin.bottom;
+            <!-- // Mike Bostock's margin convention
+            // var margin = {top: 10, right: 10, bottom: 10, left: 10}
+            // var canvasWidth = 600 - margin.left - margin.right;
+            // var canvasHeight = 250 - margin.top - margin.bottom;
 
-            var svg = d3.select("body")
-                .append("svg")
-                .attr("width", canvasWidth + margin.left + margin.right)
-                .attr("height", canvasHeight + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            // var svg = d3.select("body")
+            //     .append("svg")
+            //     .attr("width", canvasWidth + margin.left + margin.right)
+            //     .attr("height", canvasHeight + margin.top + margin.bottom)
+            //     .append("g")
+            //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            var dataset = [ 
-                { key: 0,  value: 5 }, 
-                { key: 1,  value: 10 }, 
-                { key: 2,  value: 13 }, 
-                { key: 3,  value: 19 }, 
-                { key: 4,  value: 21 }, 
-                { key: 5,  value: 25 }, 
-                { key: 6,  value: 22 }, 
-                { key: 7,  value: 18 }, 
-                { key: 8,  value: 15 }, 
-                { key: 9,  value: 13 },
-                { key: 10, value: 11 },
-                { key: 11, value: 12 },
-                { key: 12, value: 15 },
-                { key: 13, value: 20 },
-                { key: 14, value: 18 },
-                { key: 15, value: 17 },
-                { key: 16, value: 16 },
-                { key: 17, value: 18 },
-                { key: 18, value: 23 },
-                { key: 19, value: 25 } 
-            ];
+            // var dataset = [ 
+            //     { key: 0,  value: 5 }, 
+            //     { key: 1,  value: 10 }, 
+            //     { key: 2,  value: 13 }, 
+            //     { key: 3,  value: 19 }, 
+            //     { key: 4,  value: 21 }, 
+            //     { key: 5,  value: 25 }, 
+            //     { key: 6,  value: 22 }, 
+            //     { key: 7,  value: 18 }, 
+            //     { key: 8,  value: 15 }, 
+            //     { key: 9,  value: 13 },
+            //     { key: 10, value: 11 },
+            //     { key: 11, value: 12 },
+            //     { key: 12, value: 15 },
+            //     { key: 13, value: 20 },
+            //     { key: 14, value: 18 },
+            //     { key: 15, value: 17 },
+            //     { key: 16, value: 16 },
+            //     { key: 17, value: 18 },
+            //     { key: 18, value: 23 },
+            //     { key: 19, value: 25 } 
+            // ];
 
-            var key = function(d) {
-                return d.key;
-            }
+            // var key = function(d) {
+            //     return d.key;
+            // }
 
-            var xScale = d3.scale.ordinal()
-                .domain(d3.range(dataset.length))
-                .rangeRoundBands([0, canvasWidth], 0.05);
+            // var xScale = d3.scale.ordinal()
+            //     .domain(d3.range(dataset.length))
+            //     .rangeRoundBands([0, canvasWidth], 0.05);
 
-            var yScale = d3.scale.linear()
-                .domain([0, d3.max(dataset, function(d) { return d.value; })])
-                .range([0, canvasHeight]);
+            // var yScale = d3.scale.linear()
+            //     .domain([0, d3.max(dataset, function(d) { return d.value; })])
+            //     .range([0, canvasHeight]);
 
-            svg.selectAll("rect")
-                .data(dataset, key)
-                .enter()
-                .append("rect")
-                .attr({
-                    x: function(d, i) { return xScale(i); },
-                    y: function(d) { return canvasHeight - yScale(d.value); },
-                    width: xScale.rangeBand(),
-                    height: function(d) { return yScale(d.value); },
-                    fill: function(d) { return "rgb(127, 201, " + (d.value * 10) + ")"; }
-                });
+            // svg.selectAll("rect")
+            //     .data(dataset, key)
+            //     .enter()
+            //     .append("rect")
+            //     .attr({
+            //         x: function(d, i) { return xScale(i); },
+            //         y: function(d) { return canvasHeight - yScale(d.value); },
+            //         width: xScale.rangeBand(),
+            //         height: function(d) { return yScale(d.value); },
+            //         fill: function(d) { return "rgb(127, 201, " + (d.value * 10) + ")"; }
+            //     });
 
-            svg.selectAll("text")
-                .data(dataset, key)
-                .enter()
-                .append("text")
-                .text(function(d) {
-                    // return d;
-                    return d.value;
-                })
-                .attr({
-                    x: function(d, i) { 
-                        return xScale(i) + xScale.rangeBand() / 2; 
-                    },
-                    y: function(d) { 
-                        return canvasHeight - yScale(d.value) + 14;
-                    },
-                    "font-family": "sans-serif",
-                    "font-size": "11px",
-                    fill: "white",
-                    "text-anchor": "middle"
-                });
+            // svg.selectAll("text")
+            //     .data(dataset, key)
+            //     .enter()
+            //     .append("text")
+            //     .text(function(d) {
+            //         // return d;
+            //         return d.value;
+            //     })
+            //     .attr({
+            //         x: function(d, i) { 
+            //             return xScale(i) + xScale.rangeBand() / 2; 
+            //         },
+            //         y: function(d) { 
+            //             return canvasHeight - yScale(d.value) + 14;
+            //         },
+            //         "font-family": "sans-serif",
+            //         "font-size": "11px",
+            //         fill: "white",
+            //         "text-anchor": "middle"
+            //     });
 
-            d3.selectAll("p")
-                .on("click", function() {
-                    var paragraphID = d3.select(this).attr("id");
+            // d3.selectAll("p")
+            //     .on("click", function() {
+            //         var paragraphID = d3.select(this).attr("id");
 
-                    if (paragraphID == "randomize") {
-                        var numValues = dataset.length;
-                        var maxValue = 50;
-                        for (var i = 0; i < numValues; i++) {
-                            var newNumber = Math.floor(Math.random() * maxValue);
-                            if (newNumber < Math.round(maxValue/15)) {
-                                newNumber = Math.round(maxValue/15);
-                            }
-                            dataset[i].value = newNumber;
-                        }
-                    } else if (paragraphID == "add") {
-                        var maxValue = 25;
-                        var newNumber = Math.floor(Math.random() * maxValue);
-                        var highKey = dataset[dataset.length - 1].key;
-                        dataset.push({key: highKey + 1, value: newNumber});
-                    } else if (paragraphID == "remove") {
-                        dataset.shift();
-                    }
+            //         if (paragraphID == "randomize") {
+            //             var numValues = dataset.length;
+            //             var maxValue = 50;
+            //             for (var i = 0; i < numValues; i++) {
+            //                 var newNumber = Math.floor(Math.random() * maxValue);
+            //                 if (newNumber < Math.round(maxValue/15)) {
+            //                     newNumber = Math.round(maxValue/15);
+            //                 }
+            //                 dataset[i].value = newNumber;
+            //             }
+            //         } else if (paragraphID == "add") {
+            //             var maxValue = 25;
+            //             var newNumber = Math.floor(Math.random() * maxValue);
+            //             var highKey = dataset[dataset.length - 1].key;
+            //             dataset.push({key: highKey + 1, value: newNumber});
+            //         } else if (paragraphID == "remove") {
+            //             dataset.shift();
+            //         }
 
-                    xScale.domain(d3.range(dataset.length));
-                    yScale.domain([0, d3.max(dataset, function(d) {
-                        return d.value;
-                    })]);
+            //         xScale.domain(d3.range(dataset.length));
+            //         yScale.domain([0, d3.max(dataset, function(d) {
+            //             return d.value;
+            //         })]);
 
-                    var bars = svg.selectAll("rect")
-                        .data(dataset, key);
+            //         var bars = svg.selectAll("rect")
+            //             .data(dataset, key);
 
-                    var labels = svg.selectAll("text")
-                        .data(dataset, key);
+            //         var labels = svg.selectAll("text")
+            //             .data(dataset, key);
 
-                    bars.enter()
-                        .append("rect")
-                        .attr({
-                            x: canvasWidth + xScale.rangeBand() / 2,
-                            y: function(d) { return canvasHeight - yScale(d.value); },
-                            width: xScale.rangeBand(),
-                            height: function(d) { return yScale(d.value); },
-                            fill: function(d) { return "rgb(127, 201, " + (d.value * 10) + ")"; }
-                        });
+            //         bars.enter()
+            //             .append("rect")
+            //             .attr({
+            //                 x: canvasWidth + xScale.rangeBand() / 2,
+            //                 y: function(d) { return canvasHeight - yScale(d.value); },
+            //                 width: xScale.rangeBand(),
+            //                 height: function(d) { return yScale(d.value); },
+            //                 fill: function(d) { return "rgb(127, 201, " + (d.value * 10) + ")"; }
+            //             });
 
-                    labels.enter()
-                        .append("text")
-                        .text(function(d) {
-                            return d.value;
-                        })
-                        .attr({
-                            x: canvasWidth + xScale.rangeBand() / 2,
-                            y: function(d) { 
-                                return canvasHeight - yScale(d.value) + 14;
-                            },
-                            "font-family": "sans-serif",
-                            "font-size": "11px",
-                            fill: "white",
-                            "text-anchor": "middle"
-                        });
+            //         labels.enter()
+            //             .append("text")
+            //             .text(function(d) {
+            //                 return d.value;
+            //             })
+            //             .attr({
+            //                 x: canvasWidth + xScale.rangeBand() / 2,
+            //                 y: function(d) { 
+            //                     return canvasHeight - yScale(d.value) + 14;
+            //                 },
+            //                 "font-family": "sans-serif",
+            //                 "font-size": "11px",
+            //                 fill: "white",
+            //                 "text-anchor": "middle"
+            //             });
 
-                    bars.transition()
-                        .duration(500)
-                        .attr({
-                            x: function(d, i) {
-                                return xScale(i);
-                            },
-                            y: function(d) { return canvasHeight - yScale(d.value); },
-                            width: xScale.rangeBand(),
-                            height: function(d) { return yScale(d.value); }
-                        });
+            //         bars.transition()
+            //             .duration(500)
+            //             .attr({
+            //                 x: function(d, i) {
+            //                     return xScale(i);
+            //                 },
+            //                 y: function(d) { return canvasHeight - yScale(d.value); },
+            //                 width: xScale.rangeBand(),
+            //                 height: function(d) { return yScale(d.value); }
+            //             });
 
-                    labels.transition()
-                        .duration(500)
-                        .text(function(d) { return d.value;})
-                        .attr({
-                            x: function(d, i) { 
-                                return xScale(i) + xScale.rangeBand() / 2; 
-                            },
-                            y: function(d) { 
-                                return canvasHeight - yScale(d.value) + 14;
-                            }
-                        });
+            //         labels.transition()
+            //             .duration(500)
+            //             .text(function(d) { return d.value;})
+            //             .attr({
+            //                 x: function(d, i) { 
+            //                     return xScale(i) + xScale.rangeBand() / 2; 
+            //                 },
+            //                 y: function(d) { 
+            //                     return canvasHeight - yScale(d.value) + 14;
+            //                 }
+            //             });
 
-                    bars.exit()
-                        .transition()
-                        .duration(500)
-                        .attr("x", -xScale.rangeBand() - xScale.rangeBand() / 2)
-                        .remove()
+            //         bars.exit()
+            //             .transition()
+            //             .duration(500)
+            //             .attr("x", -xScale.rangeBand() - xScale.rangeBand() / 2)
+            //             .remove()
 
-                    labels.exit()
-                        .transition()
-                        .duration(500)
-                        .attr("x", -xScale.rangeBand() - xScale.rangeBand() / 2)
-                        .remove();
-                });
+            //         labels.exit()
+            //             .transition()
+            //             .duration(500)
+            //             .attr("x", -xScale.rangeBand() - xScale.rangeBand() / 2)
+            //             .remove();
+            //     });
 
-        </script>
+        </script> -->
     </body>
 </html>
