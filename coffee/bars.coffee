@@ -1,3 +1,4 @@
+# Mike Bostock's margin convention
 margin = 
     top:    10, 
     right:  10, 
