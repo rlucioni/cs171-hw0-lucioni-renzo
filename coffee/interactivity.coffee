@@ -60,24 +60,32 @@ svg.selectAll("rect")
         fill: (d) -> "rgb(127, 201, #{d * 10})"
     )
     # # SVG element tooltip
-    # .on("mouseover", (d) ->
-    #     xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2
-    #     yPosition = parseFloat(d3.select(this).attr("y")) + 14
+    .on("mouseover", (d) ->
+        xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2
+        yPosition = parseFloat(d3.select(this).attr("y")) / 2 + canvasHeight / 2
 
-    #     svg.append("text")
-    #         .attr(
-    #             id: "tooltip",
-    #             x: xPosition,
-    #             y: yPosition,
-    #             "text-anchor": "middle",
-    #             "font-family": "sans-serif",
-    #             "font-size": "11px",
-    #             "font-weight": "bold",
-    #             fill: "black"
-    #         )
-    #         .text(d)
-    # )
-    # .on("mouseout", () -> d3.select("#tooltip").remove())
+        # svg.append("text")
+        #     .attr(
+        #         id: "tooltip",
+        #         x: xPosition,
+        #         y: yPosition,
+        #         "text-anchor": "middle",
+        #         "font-family": "sans-serif",
+        #         "font-size": "11px",
+        #         "font-weight": "bold",
+        #         fill: "black"
+        #     )
+        #     .text(d)
+
+        d3.select("#tooltip")
+            .style("left", xPosition + "px")
+            .style("top", yPosition + "px")
+            .select("#value")
+            .text(d)
+
+        d3.select("#tooltip").classed("hidden", false)
+    )
+    .on("mouseout", () -> d3.select("#tooltip").classed("hidden", true))
     # .on("mouseover", () -> 
     #     d3.select(this)
     #         .attr("fill", "orange")

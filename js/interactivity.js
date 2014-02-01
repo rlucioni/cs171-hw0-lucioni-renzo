@@ -42,6 +42,14 @@ svg.selectAll("rect").data(dataset).enter().append("rect").attr({
   fill: function(d) {
     return "rgb(127, 201, " + (d * 10) + ")";
   }
+}).on("mouseover", function(d) {
+  var xPosition, yPosition;
+  xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
+  yPosition = parseFloat(d3.select(this).attr("y")) / 2 + canvasHeight / 2;
+  d3.select("#tooltip").style("left", xPosition + "px").style("top", yPosition + "px").select("#value").text(d);
+  return d3.select("#tooltip").classed("hidden", false);
+}).on("mouseout", function() {
+  return d3.select("#tooltip").classed("hidden", true);
 }).on("click", function() {
   return sortBars();
 });
